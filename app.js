@@ -1,9 +1,15 @@
 // start the js script here.
 const form = document.getElementById('calc_form');
 const output = document.getElementById('output');
-const operand_btns = document.querySelectorAll('button[data-type=operand');
-const operator_btns = document.querySelectorAll('button[data-type=operator');
+const operand_btns = document.querySelectorAll('button[data-type=operand]');
+const operator_btns = document.querySelectorAll('button[data-type=operator]');
 // by using querySelectorAll, it allows us to select all the buttons rather than going one by one. It puts them in a NodeList (an arrray with node items)
+
+const remove_active = () => {
+  operator_btns.forEach((btn) => {
+    btn.classList.remove('active');
+  });
+};
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -12,12 +18,14 @@ form.addEventListener('submit', (e) => {
 let is_operator = false;
 operand_btns.forEach((btn) => {
   btn.addEventListener('click', (e) => {
+    remove_active();
     if (output.value == '0') {
       output.value = e.target.value;
     } else if (output.value.includes('.')) {
-      output.value = output.value + ' ' + e.target.value.relapce('.', '');
+      output.value = output.value + '' + e.target.value.relapce('.', '');
     } else if (is_operator) {
-      is_operator = falseoutput.value = e.target.value;
+      is_operator = false;
+      output.value = e.target.value;
     } else {
       output.value = output.value + '' + e.target.value;
     }
@@ -27,6 +35,7 @@ operand_btns.forEach((btn) => {
 let equation = [];
 operator_btns.forEach((btn) => {
   btn.addEventListener('click', (e) => {
+    remove_active();
     e.currentTarget.classList.add('active');
     switch (e.target.value) {
       case '%':
