@@ -5,24 +5,26 @@ const operand_btns = document.querySelectorAll('button[data-type=operand]');
 const operator_btns = document.querySelectorAll('button[data-type=operator]');
 // by using querySelectorAll, it allows us to select all the buttons rather than going one by one. It puts them in a NodeList (an arrray with node items)
 
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+});
+// The above code (form.addEventListener) will help us to stop the from reloading for each input.
+let is_operator = false;
+let equation = [];
+
 const remove_active = () => {
   operator_btns.forEach((btn) => {
     btn.classList.remove('active');
   });
 };
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-});
-// The above code (form.addEventListener) will help us to stop the from reloading for each input.
-let is_operator = false;
 operand_btns.forEach((btn) => {
   btn.addEventListener('click', (e) => {
     remove_active();
     if (output.value == '0') {
       output.value = e.target.value;
     } else if (output.value.includes('.')) {
-      output.value = output.value + '' + e.target.value.relapce('.', '');
+      output.value = output.value + '' + e.target.value.replace('.', '');
     } else if (is_operator) {
       is_operator = false;
       output.value = e.target.value;
@@ -32,7 +34,6 @@ operand_btns.forEach((btn) => {
   });
 });
 
-let equation = [];
 operator_btns.forEach((btn) => {
   btn.addEventListener('click', (e) => {
     remove_active();
@@ -53,6 +54,9 @@ operator_btns.forEach((btn) => {
         let last_item = equation[equation.length - 1];
         if (['/', '*', '+', '-'].includes(last_item) && is_operator) {
           equation.pop();
+          equation.push(e.target.value);
+        } else {
+          equation.push(output.value);
           equation.push(e.target.value);
         }
         is_operator = true;
